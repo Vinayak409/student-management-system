@@ -1,0 +1,30 @@
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Date of Birth (DOB)</td>
+            <td>Branch</td>
+            <td>Semester</td>
+            <td>Photo</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let student of students">
+            <td>{{student.name}}</td>
+            <td>{{student.email}}</td>
+            <td>{{student.dob}}</td>
+            <td>{{student.branch}}</td>
+            <td>{{student.semester}}</td>
+            <td>{{student.photo}}</td>
+            <td><button (click)="viewStudentDetail(student.id)">view</button></td>
+            <td><button (click)="editStudentDetail(student.id)">edit</button></td>
+            <td><button (click)="deleteStudentDetail(student.id)">delete</button></td>
+            <td>
+                <input id="fileInput" type="file" accept="image/*" #file (change)="onChange($event, student.id)" hidden >
+                <button (click)="uploadPhoto(student.id)">upload photo</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button (click)="createNewStudent()">create new student</button>

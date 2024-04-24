@@ -1,0 +1,8 @@
+<div style="display: flex; flex-direction: column; width: 250px;">
+    <form [formGroup]="signupForm" (ngSubmit)="signupForm.valid && onSubmit() ">
+        <h2>Signup form</h2>
+        <input type="email" placeholder="Email" formControlName="email" />
+        <input type="password" placeholder="password" formControlName="password" />
+        <button type="submit" [disabled]="signupForm.invalid">signup</button>  
+    </form>
+</div>

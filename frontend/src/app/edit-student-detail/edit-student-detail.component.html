@@ -1,0 +1,27 @@
+<div *ngIf="student">
+    <h2>Edit Student Details</h2>
+    <form (ngSubmit)="onSubmit(student.id)">
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" [(ngModel)]="student.name" required>
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" [(ngModel)]="student.email" required>
+      </div>
+      <div>
+        <label for="dob">Date of Birth (DOB):</label>
+        <input type="text" id="dob" name="dob" [(ngModel)]="student.dob" required>
+      </div>
+      <div>
+        <label for="branch">Branch:</label>
+        <input type="text" id="branch" name="branch" [(ngModel)]="student.branch" required>
+      </div>
+      <div>
+        <label for="semester">Semester:</label>
+        <input type="number" id="semester" name="semester" [(ngModel)]="student.semester" required>
+      </div>
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+  

@@ -1,0 +1,12 @@
+<div style="display: flex; flex-direction: column; width: 250px;">
+    <form [formGroup]="createNewStudentForm" (ngSubmit)="createNewStudentForm.valid && onSubmit()">
+      <h2>Create New Student</h2>
+      <input type="text" placeholder="Name" formControlName="name" />
+      <input type="email" placeholder="Email" formControlName="email" />
+      <input type="text" placeholder="DOB" formControlName="dob" />
+      <input type="text" placeholder="Branch" formControlName="branch" />
+      <input type="number" placeholder="Semester" formControlName="semester" />
+      <button type="submit" [disabled]="createNewStudentForm.invalid">Submit</button>
+    </form>
+  </div>
+  
