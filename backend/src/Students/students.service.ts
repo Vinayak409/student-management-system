@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Student } from './students.model';
+import { Student, StudentI } from './students.model';
 import * as fs from 'fs/promises';
+import { StudentsDto } from './studetns.dto';
 
 @Injectable()
 export class StudentService {
@@ -10,8 +11,8 @@ export class StudentService {
     private studentModel: typeof Student,
   ) {}
 
-  createStudent(student: Student) {
-    return this.studentModel.create({ ...student });
+  createStudent(studentsDto : StudentsDto, filePath: string) {
+    return this.studentModel.create({...studentsDto, photo: filePath});
   }
 
   getAllStudents() {
@@ -22,9 +23,9 @@ export class StudentService {
     return this.studentModel.findOne({ where: { id } });
   }
 
-  async udpateStudent(id: number, student: Student) {
+  async udpateStudent(id: number, studentsDto : StudentsDto) {
     const [affectedRows, [updtedStudent]] = await this.studentModel.update(
-      student,
+      studentsDto,
       {
         where: { id },
         returning: true,
@@ -61,6 +62,6 @@ export class StudentService {
         returning: true,
       },
     );
-    return updtedStudent
+    return updtedStudent;
   }
 }

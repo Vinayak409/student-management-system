@@ -1,30 +1,49 @@
-<table>
-    <thead>
-        <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Date of Birth (DOB)</td>
-            <td>Branch</td>
-            <td>Semester</td>
-            <td>Photo</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let student of students">
-            <td>{{student.name}}</td>
-            <td>{{student.email}}</td>
-            <td>{{student.dob}}</td>
-            <td>{{student.branch}}</td>
-            <td>{{student.semester}}</td>
-            <td>{{student.photo}}</td>
-            <td><button (click)="viewStudentDetail(student.id)">view</button></td>
-            <td><button (click)="editStudentDetail(student.id)">edit</button></td>
-            <td><button (click)="deleteStudentDetail(student.id)">delete</button></td>
-            <td>
-                <input id="fileInput" type="file" accept="image/*" #file (change)="onChange($event, student.id)" hidden >
-                <button (click)="uploadPhoto(student.id)">upload photo</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<button (click)="createNewStudent()">create new student</button>
+
+<div class="p-8">
+    <table class="table-auto border">
+        <thead>
+            <tr>
+                <th class="font-bold py-2 px-4 border-b border-l text-left">Name</th>
+                <th class="font-bold py-2 px-4 border-b border-l text-left">Email</th>
+                <th class="font-bold py-2 px-4 border-b border-l text-left">Date of Birth (DOB)</th>
+                <th class="font-bold py-2 px-4 border-b border-l text-left">Branch</th>
+                <th class="font-bold py-2 px-4 border-b border-l text-left">Semester</th>
+                <th class="font-bold py-2 px-4 border-b border-l text-left">Photo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="hover:bg-stone-100" *ngFor="let student of students">
+                <td class="p-2 border-b border-l text-left">{{student.name}}</td>
+                <td class="p-2 border-b border-l text-left">{{student.email}}</td>
+                <td class="p-2 border-b border-l text-left">{{student.dob}}</td>
+                <td class="p-2 border-b border-l text-left">{{student.branch}}</td>
+                <td class="p-2 border-b border-l text-left">{{student.semester}}</td>
+                <td class="p-2 border-b border-l text-left">
+                    <img style="width: 100px; height: 100px;" src="http://localhost:3000/{{student.photo}}"
+                        alt="student photo" />
+                </td>
+                <!-- <td>{{student.photo}}</td> -->
+                <td class="p-2 border-b border-l text-left"><button
+                        class="w-full font-medium text-primary-600 hover:underline bg-blue-500 p-2 rounded"
+                        (click)="viewStudentDetail(student.id)">view</button></td>
+                <td class="p-2 border-b border-l text-left"><button
+                        class="w-full font-medium text-primary-600 hover:underline bg-blue-500 p-2 rounded"
+                        (click)="editStudentDetail(student.id)">edit</button></td>
+                <td class="p-2 border-b border-l text-left"><button
+                        class="w-full font-medium text-primary-600 hover:underline bg-blue-500 p-2 rounded"
+                        (click)="deleteStudentDetail(student.id)">delete</button></td>
+                <!-- <td>
+                    <input id="fileInput" type="file" accept="image/*" #file (change)="onChange($event, student.id)" hidden> 
+                    <button (click)="uploadPhoto(student.id)">upload photo</button> 
+                </td> -->
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="flex gap-2 p-8 -mt-3">
+    <button class="w-auto font-medium text-primary-600 hover:underline bg-blue-500 p-2 mb-2 rounded"
+        (click)="createNewStudent()">create new student</button>
+    <button class="w-auto font-medium text-primary-600 hover:underline bg-blue-500 p-2 mb-2 rounded"
+        (click)="logout()">Logout</button>
+</div>
+

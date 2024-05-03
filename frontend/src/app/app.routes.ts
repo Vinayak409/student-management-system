@@ -11,9 +11,22 @@ export const routes: Routes = [
   { path: RoutesNames.login, component: LoginComponent },
   { path: '', redirectTo: RoutesNames.login, pathMatch: 'full' },
   { path: RoutesNames.signup, component: SignupComponent },
-  { path: RoutesNames.dashboard, component: DashboardComponent },
-  { path: `${RoutesNames.viewStudentDetail}/:id`, component: ViewStudentDetailComponent },
-  { path: `${RoutesNames.editStudentDetail}/:id`, component: EditStudentDetailComponent },
-  { path: RoutesNames.createStudent, component: CreateStudentComponent },
+  {
+    path: RoutesNames.dashboard,
+    component: DashboardComponent,
+  },
+  {
+    path: `${RoutesNames.dashboard}/${RoutesNames.viewStudentDetail}/:id`,
+    component: ViewStudentDetailComponent,
+  },
 
+  // {
+  //   path: `${RoutesNames.viewStudentDetail}/:id`,
+  //   component: ViewStudentDetailComponent,
+  // },
+  {
+    path: `${RoutesNames.editStudentDetail}/:id`,
+    component: EditStudentDetailComponent,
+  },
+  { path: RoutesNames.createStudent, component: CreateStudentComponent },
 ];

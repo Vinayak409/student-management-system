@@ -8,6 +8,10 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RoutesNames } from '../constants/routes';
+import {
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { HttpService } from '../api-service/http.service';
 
 @Component({
   selector: 'app-create-student',
@@ -21,7 +25,12 @@ export class CreateStudentComponent implements OnInit {
   studentId!: number;
   students!: any[];
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    public dialogRef: MatDialogRef<CreateStudentComponent>,
+    private httpService: HttpService 
+  ) {}
 
   ngOnInit(): void {
     this.createNewStudentForm = this.fb.group({
@@ -30,30 +39,114 @@ export class CreateStudentComponent implements OnInit {
       dob: ['', Validators.required],
       branch: ['', Validators.required],
       semester: [null, Validators.required],
+      photo: [null, Validators.required],
     });
   }
 
-  onSubmit() {
-    const formData = this.createNewStudentForm.value;
-    console.log(formData);
+  // onChange(event: any, fileld: any) {
+  //   console.log('logging from onchange');
 
-    fetch('http://localhost:3000/students', {
-      mode: 'cors',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const resolvedResponse = await response.json();
-          this.router.navigate([RoutesNames.dashboard]);
-          console.log('Student has been successfully created');
-          return resolvedResponse;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
+  //   this.student.photo = event.target.files[0];
+
+  //   const requestBody = new FormData();
+  //   requestBody.append('photo', this.student.photo);
+  //   console.log(
+  //     ' this.student.photo',
+  //     this.student.photo,
+  //     requestBody,
+  //     requestBody.get('photo')
+  //   );
+
+  //   fetch(`http://localhost:3000/students/upload/${studentId}`, {
+  //     mode: 'cors',
+  //     method: 'POST',
+  //     body: requestBody,
+  //   })
+  //     .then(async (response) => {
+  //       if (response.ok) {
+  //         const resolvedResponse = await response.json();
+  //         console.log(resolvedResponse);
+  //         if (resolvedResponse !== null) {
+  //           console.log(resolvedResponse);
+  //           this.student.photo = resolvedResponse.filePath;
+  //           // this.router.navigate([RoutesNames.dashboard]);
+  //           console.log('students api workging');
+  //         } else {
+  //           console.log('user is not logged in');
+  //         }
+  //         return resolvedResponse;
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       console.log('There was an error sending the form data to the server');
+  //     });
+  // }
+
+  onChange(event: any) {
+    console.log('logging from onchange');
+    console.log('event', event);
+    const file = (event.target as any).files[0];
+    this.createNewStudentForm.patchValue({
+      photo: file,
+    });
+  }
+
+  onError(event: any) {
+    console.log('there is an error in form');
+  }
+
+  onSubmit() {
+    console.log('logging from onsubmit');
+
+    const formData = new FormData();
+    formData.append('name', this.createNewStudentForm.value.name);
+    formData.append('email', this.createNewStudentForm.value.email);
+    formData.append('dob', this.createNewStudentForm.value.dob);
+    formData.append('branch', this.createNewStudentForm.value.branch);
+    formData.append('semester', this.createNewStudentForm.value.semester);
+    formData.append('file', this.createNewStudentForm.get('photo')?.value);
+    console.log(formData.get('file'));
+
+    // fetch('http://localhost:3000/students', {
+    //   mode: 'cors',
+    //   method: 'POST',
+    //   // headers: { 'Content-Type': 'application/json' },
+    //   body: formData,
+    // })
+    //   .then(async (response) => {
+    //     if (response.ok) {
+    //       const resolvedResponse = await response.json();
+    //       this.router.navigate([RoutesNames.dashboard]);
+    //       console.log('Student has been successfully created');
+    //       return resolvedResponse;
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     console.log('There was an error sending the form data to the server');
+    //   });
+
+    this.httpService.createStudent(formData).subscribe({
+      next: (response) => {
+        this.router.navigate([RoutesNames.dashboard]);
+        console.log('Student has been successfully created');
+        return response;
+      },
+      error: (error) => {
         console.log('There was an error sending the form data to the server');
-      });
+        console.log(error);
+      },
+    });
+  }
+
+  uploadPhoto() {
+    document.getElementById('fileInput')?.click();
+    // console.log('photo is selectd ', this.student.photo);
+  }
+
+  close() {
+    this.dialogRef.close();
+    this.router.navigate([RoutesNames.dashboard]);
   }
 }

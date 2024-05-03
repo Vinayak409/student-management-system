@@ -1,7 +1,8 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { HttpService } from '../api-service/http.service';
 
 @Component({
   selector: 'app-edit-student-detail',
@@ -14,13 +15,15 @@ export class EditStudentDetailComponent implements OnInit {
   studentId!: number;
   student: any = {};
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    public dialogRef: MatDialogRef<EditStudentDetailComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private httpService: HttpService
+  ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.studentId = params['id'];
-      this.fetchStudentDetails(this.studentId);
-    });
+    this.studentId = this.data.studentId;
+    this.fetchStudentDetails(this.studentId);
   }
 
   fetchStudentDetails(studentId: number) {
@@ -51,26 +54,40 @@ export class EditStudentDetailComponent implements OnInit {
   }
 
   onSubmit(studentId: number) {
+    console.log(this.studentId);
+    console.log(studentId);
+
     const formData = this.student;
     console.log(formData);
 
-    fetch(`http://localhost:3000/students/${studentId}`, {
-      mode: 'cors',
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const resolvedResponse = await response.json();
-          // this.student.dob = this.student.dob.split('-').reverse().join('-')
-          console.log('Student successfully updated');
-          return resolvedResponse;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
+    // fetch(`http://localhost:3000/students/${studentId}`, {
+    //   mode: 'cors',
+    //   method: 'PATCH',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(formData),
+    // })
+    //   .then(async (response) => {
+    //     if (response.ok) {
+    //       const resolvedResponse = await response.json();
+    //       // this.student.dob = this.student.dob.split('-').reverse().join('-')
+    //       console.log('Student successfully updated');
+    //       return resolvedResponse;
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     console.log('There was an error sending the form data to the server');
+    //   });
+
+    this.httpService.editStudent(formData, studentId).subscribe({
+      next: (response) => {
+        console.log('Student successfully updated');
+        return response;
+      },
+      error: (error) => {
         console.log('There was an error sending the form data to the server');
-      });
+        console.log(error);
+      },
+    });
   }
 }

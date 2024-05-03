@@ -1,7 +1,19 @@
 import { Column, Model, Table } from 'sequelize-typescript';
 
+export interface StudentI {
+  id?: number;
+  name: string;
+  email: string;
+  dob: string;
+  branch: string;
+  semester: number;
+  photo: string;
+}
+
+type StudentCreationAttributes = Omit<StudentI, 'id'>;
+
 @Table
-export class Student extends Model {
+export class Student extends Model<StudentI, StudentCreationAttributes> implements StudentI {
   @Column
   name: string;
 
